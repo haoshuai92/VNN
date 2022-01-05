@@ -506,8 +506,8 @@ int VnGlCirclesDrawer::Apply(unsigned int i_fbo, std::vector<VnGlTexture *> i_te
     for (size_t i = 0; i < _circles.size(); i++) {
         DrawCircle2D circle = _circles[i];
         
-        GLfloat colors  [361 * 4] = { 1.f };
-        GLfloat vertices[361 * 4] = { 0.f };
+        GLfloat colors  [362 * 4] = { 1.f };
+        GLfloat vertices[362 * 4] = { 0.f };
         
         vertices[0] = circle._x + circle._x - 1.f;
         vertices[1] = circle._y + circle._y - 1.f;
@@ -522,9 +522,9 @@ int VnGlCirclesDrawer::Apply(unsigned int i_fbo, std::vector<VnGlTexture *> i_te
         const float r_y = circle._d * 0.5f / dst->_height;
         const float r_x = circle._d * 0.5f / dst->_width;
         
-        for (int j = 0, k = 4; j < 360; j+=1, k+=4) {
-            float y = circle._y +  r_y * _cos_angles[j];
-            float x = circle._x +  r_x * _sin_angles[j];
+        for (int j = 0, k = 4; j < 361; j+=1, k+=4) {
+            float y = circle._y +  r_y * _sin_angles[j % 360];
+            float x = circle._x +  r_x * _cos_angles[j % 360];
             // set vertices:
             vertices[k + 0] = x + x - 1.f;
             vertices[k + 1] = y + y - 1.f;
@@ -540,7 +540,7 @@ int VnGlCirclesDrawer::Apply(unsigned int i_fbo, std::vector<VnGlTexture *> i_te
         _program->Use();
         _program->VertexAttribPointerAndEnable("av4_Position", 4, GL_FLOAT, GL_FALSE, 0, vertices);
         _program->VertexAttribPointerAndEnable("av4_Color", 4, GL_FLOAT, GL_FALSE, 0, colors);
-        _program->DrawArrays(GL_TRIANGLE_FAN, 0, 361);
+        _program->DrawArrays(GL_TRIANGLE_FAN, 0, 362);
         _program->VertexAttribDisable("av4_Position");
         _program->VertexAttribDisable("av4_Color");
     }
